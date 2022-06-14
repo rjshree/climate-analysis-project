@@ -54,3 +54,27 @@ a. Find the entry whose city has the highest AverageTemperature since the
 year 2000.
 &emsp;&emsp;&emsp; curl --location --request GET 'http://127.0.0.1:5000/v1/city?year=2000'
 &emsp;&emsp;&emsp; ![Screenshot](https://github.com/rjshree/climate-analysis-project/blob/master/highesttempsince2000.JPG)
+
+b. Assume the temperature observation of the city last month
+breaks the record. It is 0.1 degree higher with the same uncertainty. Create
+this entry.
+&emsp;&emsp;&emsp; Here updating the record with highest temperature + 0.1 found from above query(3a) to the previous month of the city resulted from above query.
+&emsp;&emsp;&emsp; curl --location --request POST 'http://127.0.0.1:5000/v1/city' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "correction":0.1,
+    "year":2000
+}'
+&emsp;&emsp;&emsp; ![Screenshot 3b](https://github.com/rjshree/climate-analysis-project/blob/master/screenshot_3b.JPG)
+
+c. Assume the returned entry has been found erroneous.
+The actual average temperature of this entry is 2.5 degrees lower. Update
+this entry
+&emsp;&emsp;&emsp; Decreasing the average temperature resulted from first query by 2.5
+&emsp;&emsp;&emsp; curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "correction":2.5,
+    "year":2000
+}'
+&emsp;&emsp;&emsp; ![Screenshot_3c](https://github.com/rjshree/climate-analysis-project/blob/master/screenshot_3c.JPG)
