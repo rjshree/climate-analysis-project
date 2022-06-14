@@ -89,3 +89,5 @@ curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
 }'
 ```
 &emsp;&emsp;&emsp; ![Screenshot_3c](https://github.com/rjshree/climate-analysis-project/blob/master/screenshot_3c.JPG)
+
+Coding of all the above features took me 6-7 hours. Data loading was consuming a lot of time.

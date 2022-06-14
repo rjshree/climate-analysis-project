@@ -6,8 +6,12 @@ from constants import *
 from sqlalchemy.sql.expression import func, extract
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-Base = declarative_base()
+import logging
 
+logger = logging.getLogger(os.path.basename(__file__))
+logging.basicConfig(level=logging.INFO)
+logger.setLevel(logging.INFO)
+Base = declarative_base()
 
 
 class Instance(Base):
@@ -66,6 +70,7 @@ def get_item_by_monthly(start_date, end_date):
         return result
     except Exception as e:
         mysql_session.rollback()
+        logger.info(f"Error in fetching {e}")
         return {'status': 'Error in fetching records'}
     finally:
         mysql_session.close()
@@ -119,9 +124,7 @@ def update_item_by_year(args):
     try:
         update_session = get_mysql_session()
         update_session.execute(
-            "update city_temperature as dest, (select * from city_temperature where year(date_published)>=2000 order by "
-            "average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - :val where "
-            "dest.date_published=src.date_published and dest.city=src.city;", {'val': args.correction})
+            "update city_temperature as dest, (select * from city_temperature where year(date_published)>=2000 order by average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - :val where dest.date_published=src.date_published and dest.city=src.city;", {'val': args.correction})
         update_session.commit()
     except Exception as e:
         update_session.rollback()

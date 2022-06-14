@@ -26,8 +26,8 @@ class Climate(Resource):
 
     def get(self):
         try:
-
             args = parser.parse_args()
+            logger.info(f"Inside get scope {args}")
             if args.start and args.end:
                 records = get_item_by_monthly(args.start, args.end)
                 return send_response(records), 200
