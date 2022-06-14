@@ -21,7 +21,7 @@ dt as date_published, city, country, latitude, longitude
 
 #### 2a. Create a new entry in the table.
 ```bash
-&emsp;&emsp;&emsp; curl --location --request POST 'http://127.0.0.1:5000/v1/city' \
+curl --location --request POST 'http://127.0.0.1:5000/v1/city' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "date":"2022-01-24",
@@ -36,7 +36,7 @@ dt as date_published, city, country, latitude, longitude
 ```
 #### 2b. Update an existing entry by specifying a date and a city name with a provided value of AverageTemperature or AverageTemperatureUncertainty.
 ```bash
-&emsp;&emsp;&emsp; curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
+curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "date_published":"2022-01-24",
@@ -50,13 +50,15 @@ dt as date_published, city, country, latitude, longitude
 ```
 #### 2c. Return the top N cities that have the highest monthly AverageTemperature in a specified time range. Each row is the entry of a city’s highest temperature. All columns should be included in the response.
 ```bash
-&emsp;&emsp;&emsp; curl --location --request GET 'http://127.0.0.1:5000/v1/city?start=1743-01-01&end=1745-12-01'
+curl --location --request GET 'http://127.0.0.1:5000/v1/city?start=1743-01-01&end=1745-12-01'
 ```
 
 #### 3. Examples
 a. Find the entry whose city has the highest AverageTemperature since the
 year 2000.
+```bash
 &emsp;&emsp;&emsp; curl --location --request GET 'http://127.0.0.1:5000/v1/city?year=2000'
+```
 &emsp;&emsp;&emsp; ![Screenshot](https://github.com/rjshree/climate-analysis-project/blob/master/highesttempsince2000.JPG)
 
 b. Assume the temperature observation of the city last month
@@ -65,7 +67,7 @@ this entry. <br/>
 
 &emsp;&emsp;&emsp; Here updating the record with highest temperature + 0.1 found from above query(3a) to the previous month of the city resulted from above query.
 ```bash
-&emsp;&emsp;&emsp; curl --location --request POST 'http://127.0.0.1:5000/v1/city' \
+curl --location --request POST 'http://127.0.0.1:5000/v1/city' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "correction":0.1,
@@ -79,7 +81,7 @@ The actual average temperature of this entry is 2.5 degrees lower. Update
 this entry. <br/>
 &emsp;&emsp;&emsp; Decreasing the average temperature resulted from first query by 2.5
 ```bash
-&emsp;&emsp;&emsp; curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
+curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "correction":2.5,
