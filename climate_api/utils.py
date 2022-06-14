@@ -5,7 +5,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from constants import *
 from sqlalchemy.sql.expression import func, extract
 from datetime import datetime
-
+# from datetime import *
+from dateutil.relativedelta import relativedelta
 Base = declarative_base()
 
 
@@ -22,7 +23,7 @@ class Instance(Base):
     longitude = Column('longitude', String(100), primary_key= True)
 
     def __repr__(self):
-        return '{"date":"%s", "avg_temperature":"%s", "city":"%s", "average_temperature_uncertainty":"%s","country":"%s","latitude":"%s", "longitude":"%s"}' \
+        return '{"date":"%s", "avg_temperature":"%s",  "average_temperature_uncertainty":"%s","city":"%s","country":"%s","latitude":"%s", "longitude":"%s"}' \
                %(self.date_published, self.average_temperature, self.average_temperature_uncertainty, self.city, self.country, self.latitude, self.longitude)
 
 def get_mysql_engine(host, port, database, user, password):
@@ -126,7 +127,7 @@ def update_item_by_year(args):
     finally:
         update_session.close()
 
-def create_item_by_condition():
+def create_item_by_condition(year, correction):
     """
     INSERT INTO `climate`.`global_city_temperature`
 (`date_published`,
@@ -146,4 +147,34 @@ g.latitude,
 g.longitude from global_city_temperature g, (select date_published, city from global_city_temperature  where year(date_published) >= 2000 order by average_temperature desc limit 1) as src  where g.date_published = DATE_SUB(src.date_published, INTERVAL 1 MONTH) and g.city=src.city) ;
     :return:
     """
-    pass
+    instance = get_item_by_year(year)
+    print("queried instance", instance)
+    last_month = instance.date_published - relativedelta(months=1)
+    instance.average_temperature +=0.1
+    instance.date_published = last_month
+    print(" updated instance", instance)
+    try:
+        session = get_mysql_session()
+        record = session.query(Instance).filter(Instance.date_published == instance.date_published, Instance.city == instance.city).first()
+        print(record)
+        if record:
+            session.query(Instance).filter(Instance.city == instance.city,
+                                              Instance.date_published == instance.date_published).update(
+            {Instance.average_temperature: instance.average_temperature})
+        else:
+            session.add(instance)
+
+        session.commit()
+    except Exception as e:
+        session.rollback()
+    finally:
+        session.close()
+    return instance
+
+
+class CustomResponse:
+    def __init__(self, message="Internal server error", status=500):
+        self.body={
+            "status": status,
+            "message": message
+        }
