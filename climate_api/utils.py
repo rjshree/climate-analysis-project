@@ -5,14 +5,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from constants import *
 from sqlalchemy.sql.expression import func, extract
 from datetime import datetime
-# from datetime import *
 from dateutil.relativedelta import relativedelta
 Base = declarative_base()
 
 
 
 class Instance(Base):
-    __tablename__ = 'city_temperature'
+    __tablename__ = 'Global_Land_Temperatures_By_City'
 
     date_published = Column('date_published', DateTime, primary_key= True)
     average_temperature = Column('average_temperature',Float)
@@ -120,7 +119,9 @@ def update_item_by_year(args):
     try:
         update_session = get_mysql_session()
         update_session.execute(
-            "update city_temperature as dest, (select * from city_temperature where year(date_published)>=2000 order by average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - 2.5 where dest.date_published=src.date_published and dest.city=src.city;")
+            "update city_temperature as dest, (select * from city_temperature where year(date_published)>=2000 order by "
+            "average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - :val where "
+            "dest.date_published=src.date_published and dest.city=src.city;", {'val': args.correction})
         update_session.commit()
     except Exception as e:
         update_session.rollback()

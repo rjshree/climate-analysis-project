@@ -57,7 +57,7 @@ curl --location --request GET 'http://127.0.0.1:5000/v1/city?start=1743-01-01&en
 a. Find the entry whose city has the highest AverageTemperature since the
 year 2000.
 ```bash
-&emsp;&emsp;&emsp; curl --location --request GET 'http://127.0.0.1:5000/v1/city?year=2000'
+curl --location --request GET 'http://127.0.0.1:5000/v1/city?year=2000'
 ```
 &emsp;&emsp;&emsp; ![Screenshot](https://github.com/rjshree/climate-analysis-project/blob/master/highesttempsince2000.JPG)
 

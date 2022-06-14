@@ -1,11 +1,11 @@
 import os
 
 
-os.environ['HOST'] = 'localhost'
-os.environ['PORT'] = '3306'
-os.environ['DBNAME'] = 'climate'
-os.environ['DB_USER'] = 'root'
-os.environ['DB_PASSWORD'] = 'root123'
+# os.environ['HOST'] = 'localhost'
+# os.environ['PORT'] = '3306'
+# os.environ['DBNAME'] = 'climate'
+# os.environ['DB_USER'] = 'root'
+# os.environ['DB_PASSWORD'] = 'root123'
 
 MYSQL_HOST= os.environ['HOST']
 MYSQL_PORT= os.environ['PORT']
