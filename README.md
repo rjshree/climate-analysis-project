@@ -1,9 +1,56 @@
-# climate-analysis-project
+# Climate-Analysis-Project
 
 ## Tasks
-1. Setup a database of your choice. Create a table Global_Land_Temperatures_By_City
-with an appropriate table schema and load the data of
-GlobalLandTemperaturesByCity.csv into the table. 
+#### 1. Setup a database of your choice. Create a table Global_Land_Temperatures_By_City with an appropriate table schema and load the data of GlobalLandTemperaturesByCity.csv into the table. 
 
-I used MySQL 8.0.29 community server  and loaded the data via MySQL Workbench. I faced challenges in loading data in my personal pc due to space issue.
-Hence I was able to load only 10 lakhs records.
+   
+   &emsp;&emsp;&emsp; I used MySQL 8.0.29 community server and loaded the data via MySQL Workbench. I faced challenges in loading data in my personal pc due to space issue. Hence I was able to load only 10 lakhs records.
+
+##### &emsp;&emsp;&emsp; Analysis on data:<br />
+&emsp;&emsp;&emsp;Total number of records: 8599212<br />
+&emsp;&emsp;&emsp;Total number of columns: 7<br />
+&emsp;&emsp;&emsp;Null values present in: AverageTemperature, AverageTemperatureUncertainty<br />
+&emsp;&emsp;&emsp;Total number of null values in AverageTemperature: 364130<br />
+&emsp;&emsp;&emsp;Total number of null values in AverageTemperatureUncertainty: 364130<br />
+
+&emsp;&emsp;&emsp; By considering the above data, designed the table Global_Land_Temperatures_By_City with following Primary Keys:
+dt as date_published, city, country, latitude, longitude
+
+#### 2. Use a python web framework, such as Flask or Django, and build a REST web service that accesses the database.
+ &emsp;&emsp;&emsp; Implemented using Flask-RESTful framework
+
+#### 2a. Create a new entry in the table.
+&emsp;&emsp;&emsp; curl --location --request POST 'http://127.0.0.1:5000/v1/city' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "date":"2022-01-24",
+    "avg_temperature":21.21,
+    "avg_temperature_uncertainty":24.21,
+    "city":"Bangalore",
+    "country":"India",
+    "latitude":"21.21N",
+    "longitude":"24.24S"
+
+}'
+
+#### 2b. Update an existing entry by specifying a date and a city name with a provided value of AverageTemperature or AverageTemperatureUncertainty.
+&emsp;&emsp;&emsp; curl --location --request PUT 'http://127.0.0.1:5000/v1/city' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "date_published":"2022-01-24",
+    "average_temperature":24.24,
+    "average_temperature_uncertainty":24.24,
+    "city":"Bangalore",
+    "country":"India",
+    "latitude":"21.21N",
+    "longitude":"24.24S"
+}'
+
+#### 2c. Return the top N cities that have the highest monthly AverageTemperature in a specified time range. Each row is the entry of a city’s highest temperature. All columns should be included in the response.
+&emsp;&emsp;&emsp; curl --location --request GET 'http://127.0.0.1:5000/v1/city?start=1743-01-01&end=1745-12-01'
+
+#### 3. Examples
+a. Find the entry whose city has the highest AverageTemperature since the
+year 2000.
+&emsp;&emsp;&emsp; curl --location --request GET 'http://127.0.0.1:5000/v1/city?year=2000'
+&emsp;&emsp;&emsp; ![Screenshot](https://github.com/rjshree/climate-analysis-project/blob/master/highesttempsince2000.JPG)
