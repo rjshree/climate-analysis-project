@@ -12,7 +12,7 @@ CREATE TABLE `Global_Land_Temperatures_By_City` (
   PRIMARY KEY (`date_published`,`city`,`country`,`latitude`,`longitude`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-INSERT INTO `climate`.`global_city_temperature`
+INSERT INTO `climate`.`Global_Land_Temperatures_By_City`
 (`date_published`,
 `average_temperature`,
 `average_temperature_uncertainty`,
@@ -20,5 +20,5 @@ INSERT INTO `climate`.`global_city_temperature`
 `country`,
 `latitude`,
 `longitude`) values
-('2022-06-14',35.6,0.54,'Chennai','India','13.0827N', '80.2707E');
+('2022-06-14',35.6,0.54,'Chennai','India','13.0827N', '80.2707E'),
 ('2022-05-14',39.6,0.44,'Chennai','India','13.0827N', '80.2707E');

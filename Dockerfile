@@ -12,4 +12,4 @@ COPY . /app
 ENV "PYTHONUNBUFFERED" 1
 ENV "PYTHONPATH" "/app"
 EXPOSE 5000
-CMD ["gunicorn", "-w", "4", "--bind", "--chdir", "climate_api","api:app"]
+CMD ["gunicorn", "-w", "4", "--bind","0.0.0.0:5000", "--chdir", "climate_api","api:app"]

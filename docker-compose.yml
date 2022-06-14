@@ -14,9 +14,10 @@ services:
             - "5000:5000"
 
     db:
+        container_name: climate-db
         image: mysql:8.0.21
         ports:
-            - "3306:3306"
+            - "30000:3306"
         volumes:
             - ./db:/docker-entrypoint-initdb.d/:ro
         environment:
