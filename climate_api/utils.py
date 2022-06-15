@@ -9,10 +9,27 @@ from dateutil.relativedelta import relativedelta
 import logging
 
 logger = logging.getLogger(os.path.basename(__file__))
-logging.basicConfig(level=logging.INFO)
-logger.setLevel(logging.INFO)
 Base = declarative_base()
 
+
+
+def update_logging_level(log_level):
+    """
+    updates log level based on environment variable log_level
+    :param log_level:
+    :return:
+    """
+    target_log_level = logging.ERROR
+    if log_level == 'DEBUG':
+        target_log_level = logging.DEBUG
+    if log_level == 'INFO':
+        target_log_level = logging.INFO
+    if log_level == 'WARNING':
+        target_log_level = logging.WARNING
+    logging.basicConfig(level=logging.INFO)
+    logger.setLevel(target_log_level)
+
+update_logging_level(LOG_LEVEL)
 
 class Instance(Base):
     __tablename__ = 'Global_Land_Temperatures_By_City'
@@ -85,6 +102,7 @@ def get_item_by_year(year):
         return result
     except Exception as e:
         mysql_session.rollback()
+        logger.error(e)
         return {'status': 'Error in fetching records'}
     finally:
         mysql_session.close()
@@ -101,8 +119,11 @@ def create_item(args):
         insert_session = get_mysql_session()
         insert_session.add(insert)
         insert_session.commit()
+        return CustomResponse("Successfully inserted the row", 201).body, 201
     except Exception as e:
+        logger.error(f"Exception in creating records {e}")
         insert_session.rollback()
+        return CustomResponse(f"{e}").body, 500
     finally:
         insert_session.close()
 
@@ -116,6 +137,7 @@ def update_item_by_city_and_date(args):
              'average_temperature_uncertainty': args.average_temperature_uncertainty})
         update_session.commit()
     except Exception as e:
+        logger.error(e)
         update_session.rollback()
     finally:
         update_session.close()
@@ -127,6 +149,7 @@ def update_item_by_year(args):
             "update city_temperature as dest, (select * from city_temperature where year(date_published)>=2000 order by average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - :val where dest.date_published=src.date_published and dest.city=src.city;", {'val': args.correction})
         update_session.commit()
     except Exception as e:
+        logger.error(e)
         update_session.rollback()
     finally:
         update_session.close()
@@ -170,6 +193,7 @@ g.longitude from global_city_temperature g, (select date_published, city from gl
 
         session.commit()
     except Exception as e:
+        logger.error(f"Exception in creating records {e}")
         session.rollback()
     finally:
         session.close()

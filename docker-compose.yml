@@ -10,6 +10,7 @@ services:
             DBNAME: climate
             DB_USER: root
             DB_PASSWORD: root123
+            LOG_LEVEL: ERROR
         ports:
             - "5000:5000"
 
