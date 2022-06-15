@@ -1,5 +1,10 @@
 # Climate-Analysis-Project
 
+## Steps to setup containers
+&emsp;&emsp;&emsp; 1. docker-compose up -d <br/>
+&emsp;&emsp;&emsp; 2. Login into mysql container once to avoid mysql errors:<br/> 
+&emsp;&emsp;&emsp;&emsp; a. docker exec -it climate-db bash followed by b. mysql -u root -proot123
+
 ## Tasks
 #### 1. Setup a database of your choice. Create a table Global_Land_Temperatures_By_City with an appropriate table schema and load the data of GlobalLandTemperaturesByCity.csv into the table. 
 

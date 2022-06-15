@@ -20,7 +20,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"date\":\"2022-01-24\",\r\n    \"avg_temperature\":21.21,\r\n    \"avg_temperature_uncertainty\":24.21,\r\n    \"city\":\"Bangalore\",\r\n    \"country\":\"India\",\r\n    \"latitude\":\"21.21N\",\r\n    \"longitude\":\"24.24S\"\r\n\r\n}"
+					"raw": "{\r\n    \"date_published\":\"2022-01-24\",\r\n    \"average_temperature\":21.21,\r\n    \"average_temperature_uncertainty\":24.21,\r\n    \"city\":\"Bangalore\",\r\n    \"country\":\"India\",\r\n    \"latitude\":\"21.21N\",\r\n    \"longitude\":\"24.24S\"\r\n\r\n}"
 				},
 				"url": {
 					"raw": "http://127.0.0.1:5000/v1/city",
