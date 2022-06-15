@@ -146,7 +146,7 @@ def update_item_by_year(args):
     try:
         update_session = get_mysql_session()
         update_session.execute(
-            "update city_temperature as dest, (select * from city_temperature where year(date_published)>=2000 order by average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - :val where dest.date_published=src.date_published and dest.city=src.city;", {'val': args.correction})
+            "update Global_Land_Temperatures_By_City as dest, (select * from Global_Land_Temperatures_By_City where year(date_published)>=2000 order by average_temperature desc limit 1) as src set dest.average_temperature=dest.average_temperature - :val where dest.date_published=src.date_published and dest.city=src.city;", {'val': args.correction})
         update_session.commit()
     except Exception as e:
         logger.error(e)
@@ -175,16 +175,17 @@ g.longitude from global_city_temperature g, (select date_published, city from gl
     :return:
     """
     instance = get_item_by_year(year)
-    print("queried instance", instance)
+    logger.error(f"queried by year {instance}")
     last_month = instance.date_published - relativedelta(months=1)
     instance.average_temperature +=0.1
     instance.date_published = last_month
-    print(" updated instance", instance)
+    logger.error(f"values to update {instance}")
     try:
         session = get_mysql_session()
         record = session.query(Instance).filter(Instance.date_published == instance.date_published, Instance.city == instance.city).first()
-        print(record)
+        logger.error(f" last month value to be updated {record}")
         if record:
+            logger.error("Record exists for last month value hence update it")
             session.query(Instance).filter(Instance.city == instance.city,
                                               Instance.date_published == instance.date_published).update(
             {Instance.average_temperature: instance.average_temperature})

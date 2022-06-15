@@ -17,6 +17,7 @@ parser.add_argument('country', type=str, help='country where the temperature was
 parser.add_argument('latitude', type=str, help='latitude of the temperature ')
 parser.add_argument('longitude', type=str, help='longitude of the temperature ')
 parser.add_argument('correction', type=float, help='End Date when the temperature was recorded')
+parser.add_argument('year', type=int, help='Year when the temperature was recorded')
 
 
 get_parser = reqparse.RequestParser(bundle_errors=True)
